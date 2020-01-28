@@ -1,6 +1,6 @@
 /*
  ============================================================================
- Name        : demo.c
+ Name        : HW3.c
  Author      : 
  Version     :
  Copyright   : Your copyright notice
@@ -10,22 +10,20 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "production.h"
 #include "tests.h"
+#include "production.h"
+#include "EL.h"
 
 int main(int argc, char* argv[]) {
-	puts("Let's get started with HW1"); /* prints !!!Hello World!!! */
+	puts("!!!Let's do HW1!!!"); /* prints !!!Hello World!!! */
 	if(tests())
 	{
-		if(production(argc, argv))
-		{
-			puts("Hurray, it worked");
-
-		}
-		else
-		{
-			puts("Sorry");
-		}
+		puts("About to run production.");
+		production(argc, argv);
+	}
+	else
+	{
+		 puts("Tests did not pass.");
 	}
 	return EXIT_SUCCESS;
 }
