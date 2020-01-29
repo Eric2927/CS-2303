@@ -9,14 +9,9 @@
 #define LAYOUT_H_
 
 #include <stdbool.h>;
+#include "room.h"
 
-bool open(Room aRoom);
-
-typedef struct {
-	int nRooms;
-	Room firstRoom;
-} Layout;
-
-
+int countRooms();
+Room getFirstRoom();
 
 #endif /* LAYOUT_H_ */

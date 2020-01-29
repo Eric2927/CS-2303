@@ -5,4 +5,14 @@
  *      Author: eric_li
  */
 
+#include "house.h"
 
+int getNumberOfRooms() {
+	int nRooms = countRooms();
+	return nRooms;
+}
+
+Room getNewRoom() {
+	Room firstRoom = getFirstRoom();
+	return firstRoom;
+}

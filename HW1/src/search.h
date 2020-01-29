@@ -10,10 +10,9 @@
 
 #include <stdbool.h>;
 
-int getNumberOfRooms(House aHouse);
-Room getNewRoom(House aHouse);
-bool haveTreasure(Room aRoom);
-
-
+// ifndef should deal with include overlaps
+#include "house.h"
+#include "layout.h"
+#include "room.h"
 
 #endif /* SEARCH_H_ */

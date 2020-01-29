@@ -9,13 +9,10 @@
 #define HOUSE_H_
 
 #include <stdbool.h>;
+#include "layout.h"
+#include "room.h"
 
-int countRooms(Layout aLayout);
-Room getFirstRoom(Layout aLayout);
-
-typedef struct {
-	Room aRoom;
-} House;
-
+int getNumberOfRooms();
+Room getNewRoom();
 
 #endif /* HOUSE_H_ */
