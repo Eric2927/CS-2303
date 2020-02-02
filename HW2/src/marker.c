@@ -6,6 +6,7 @@
  */
 
 #include "marker.h"
+#include "LinkedList.h"
 
 Marker* placeMarker(int r, int c, int i)
 {
@@ -16,4 +17,8 @@ Marker* placeMarker(int r, int c, int i)
 	mP->index = i;
 
 	return mP;
+}
+
+void addMarkerToPath(LLNode* path, Marker* newMarker) {
+	savePayload(path, newMarker);
 }

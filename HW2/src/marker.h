@@ -17,6 +17,6 @@ typedef struct
 
 #include <stdbool.h>
 
-Marker* placeMarker(int, int);
+Marker* placeMarker(int, int, int);
 
 #endif /* MARKER_H_ */

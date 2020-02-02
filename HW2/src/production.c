@@ -5,6 +5,7 @@
  *      Author: Therese
  */
 #include "production.h"
+#include "EL.h"
 
 bool production(int argc, char* argv[])
 {
@@ -80,11 +81,38 @@ bool production(int argc, char* argv[])
 
 	}//end of command line arguments
 
+	srand(time(0));
+
 	//obtain space for 20x20 of integers
 
-	int* theSpaceP = (int*) malloc(20*20*sizeof(int));
-    bool okInit = initSpace(theSpaceP, 20);
+	int gridDimensions = 20;
+	int* theSpaceP = (int*) malloc(gridDimensions*gridDimensions*sizeof(int));
+    bool okInit = initSpace(theSpaceP, gridDimensions);
 
+    LLNode* path = makeEmptyLinkedList();
+    Marker* start = generateRandomStart(theSpaceP, gridDimensions);
+    savePayload(path, start);
+
+    int counter = 0;
+    Marker* previousMarker = start;
+    int numMoves = 5;
+    displaySpace(theSpaceP, gridDimensions);
+    puts("\n\n");
+    while (counter < numMoves) {
+    	Marker* nextPosition = generateNextPosition(theSpaceP, gridDimensions, previousMarker);
+    	savePayload(path, nextPosition);
+    	displaySpace(theSpaceP, gridDimensions);
+    	puts("\n\n");
+    	previousMarker = nextPosition;
+    	counter ++;
+    }
+
+    LLNode* cursor = path;
+    while (cursor->next) {
+    	printf("(%d, %d)\n", cursor->payP->row, cursor->payP->col);
+    	cursor = cursor->next;
+    }
+	printf("(%d, %d)\n", cursor->payP->row, cursor->payP->col);
 
 	//we'll want to read the file
 	return answer;

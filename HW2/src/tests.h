@@ -11,11 +11,9 @@
 
 #include "production.h"
 bool tests();
-
-bool testReadFile();
-bool testGotAdjacencyMatrix();
-bool testSomethingElse();
-bool testRemoveFromList();
+bool testInitSpace();
+bool testGenerateRandomStart();
+bool testGenerateNextPosition();
 
 
 #endif /* TESTS_H_ */
