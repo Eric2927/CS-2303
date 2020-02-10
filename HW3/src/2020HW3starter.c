@@ -10,9 +10,10 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+
+#include "EL.h"
 #include "tests.h"
 #include "production.h"
-#include "TMSName.h"
 
 int main(int argc, char* argv[]) {
 	puts("!!!Let's do  HW3!!!"); /* prints !!!Hello World!!! */

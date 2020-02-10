@@ -68,8 +68,97 @@ bool testReadFile()
 bool testGotAdjacencyMatrix()
 {
 	bool ans = true;
+	puts("starting testGotAdjacencyMatrix");
 
+	// test case 1: init
+	AdjMat* adjMP = (AdjMat*) malloc(sizeof(AdjMat));
+	adjMP->n = 5;
+	adjMP->edgesP = (int*) malloc(5*5*sizeof(int));
+	init(adjMP);
+	for(int row = 0; row < 5; row++)
+	{
+		for(int col = 0; col < 5; col++)
+		{
+			if (*((adjMP->edgesP)+(row*5)+col) != 0) {
+				ans = false;
+			}
+		}
+	}
 
+	// test case 2: setEdge
+	setEdge(adjMP, 1, 4);
+	setEdge(adjMP, 3, 2);
+	for(int row = 0; row < 5; row++)
+	{
+		for(int col = 0; col < 5; col++)
+		{
+			if (row == 1 && col == 4) {
+				if (*((adjMP->edgesP)+(row*5)+col) != 1) {
+					ans = false;
+				}
+			}
+			else if (row == 4 && col == 1) {
+				if (*((adjMP->edgesP)+(row*5)+col) != 1) {
+					ans = false;
+				}
+			}
+			else if (row == 3 && col == 2) {
+				if (*((adjMP->edgesP)+(row*5)+col) != 1) {
+					ans = false;
+				}
+			}
+			else if (row == 2 && col == 3) {
+				if (*((adjMP->edgesP)+(row*5)+col) != 1) {
+					ans = false;
+				}
+			}
+			else {
+				if (*((adjMP->edgesP)+(row*5)+col) != 0) {
+					ans = false;
+				}
+			}
+		}
+	}
+
+	// test case 3: getEdge
+	for(int row = 0; row < 5; row++)
+	{
+		for(int col = 0; col < 5; col++)
+		{
+			if (row == 1 && col == 4) {
+				if (getEdge(adjMP, row, col) != 1) {
+					ans = false;
+				}
+			}
+			else if (row == 4 && col == 1) {
+				if (getEdge(adjMP, row, col) != 1) {
+					ans = false;
+				}
+			}
+			else if (row == 3 && col == 2) {
+				if (getEdge(adjMP, row, col) != 1) {
+					ans = false;
+				}
+			}
+			else if (row == 2 && col == 3) {
+				if (getEdge(adjMP, row, col) != 1) {
+					ans = false;
+				}
+			}
+			else {
+				if (getEdge(adjMP, row, col) != 0) {
+					ans = false;
+				}
+			}
+		}
+	}
+
+	if (ans) {
+		puts("testGotAdjacencyMatrix passed.");
+	}
+	else {
+		puts("testGotAdjacencyMatrix did not pass.");
+	}
 	return ans;
 }
 
@@ -88,17 +177,82 @@ bool testMakeLList()
 		ok = false;
 	}
 	//test case 2:
-	//TODO more test cases here
-	else
-	{
+	Room* roomOne = (Room*) malloc(sizeof(Room));
+	roomOne->roomNumber = 46;
+	roomOne->searched = true;
+	roomOne->treasure = 3.2;
+	savePayload(theListP, roomOne);
+	if (isEmpty(theListP)) {
+		ok = false;
+	}
+
+	// test case 3:
+	if (theListP->payP->roomNumber != 46 &&
+			theListP->payP->searched != true &&
+			theListP->payP->treasure != 3.2) {
+		ok = false;
+	}
+
+	if (ok) {
+		puts("test make LList passed.");
+	}
+	else {
 		puts("test make LList did not pass.");
 	}
 
 	return ok;
 }
 
+// Since there is no official "enqueue" function besides savePayload,
+// which has already been tested in testMakeLList,
+// this test will be testing the two dequeue functions instead
 bool testEnqueue() {
-	return false;
+	bool works = true;
+	LLNode* theListP = makeEmptyLinkedList();
+
+	// test case 1: dequeueLIFO
+	Room* roomOne = (Room*) malloc(sizeof(Room));
+	Room* roomTwo = (Room*) malloc(sizeof(Room));
+	Room* roomThree = (Room*) malloc(sizeof(Room));
+	Room* roomFour = (Room*) malloc(sizeof(Room));
+	roomOne->roomNumber = 1;
+	roomTwo->roomNumber = 2;
+	roomThree->roomNumber = 3;
+	roomFour->roomNumber = 4;
+	savePayload(theListP, roomOne);
+	savePayload(theListP, roomTwo);
+	savePayload(theListP, roomThree);
+	if (dequeueLIFO(theListP) != roomThree) {
+		works = false;
+	}
+	if (dequeueLIFO(theListP) != roomTwo) {
+		works = false;
+	}
+
+	// test case 2: dequeueFIFO
+	savePayload(theListP, roomThree);
+	savePayload(theListP, roomFour);
+	backFromDQFIFO* dqFirst = dequeueFIFO(theListP);
+	if (dqFirst->mp != roomOne) {
+		works = false;
+	}
+	theListP = dqFirst->newQHead;
+	backFromDQFIFO* dqSecond = dequeueFIFO(theListP);
+	if (dqSecond->mp != roomThree) {
+		works = false;
+	}
+	if (dqSecond->newQHead->payP != roomFour) {
+		works = false;
+	}
+
+	if (works) {
+		puts("testEnqueue passed.");
+	}
+	else {
+		puts("testEnqueue did not pass.");
+	}
+
+	return works;
 }
 
 
@@ -202,8 +356,32 @@ bool testRemoveFromList()
 	printf("testRemove case 6 with %d\n", ok); fflush(stdout);
 	return ok;
 }
+
+// Not sure how this can be tested, since printHistory only prints out strings and doesn't return anything
+// Therefore, this test will be purely visual, based on reading the console.
 bool testPrintHistory()
 {
 	bool ok = true;
+	puts("Starting testPrintHistory");
+	LLNode* theListP = makeEmptyLinkedList();
+	puts("\nCorrect Result 1:\n\"Empty List\"\nActual Result:");
+	printHistory(theListP); // Should print "Empty List"
+	Room* roomOne = (Room*) malloc(sizeof(Room));
+	Room* roomNine = (Room*) malloc(sizeof(Room));
+	Room* roomThirteen = (Room*) malloc(sizeof(Room));
+	roomOne->roomNumber = 1;
+	roomOne->treasure = 3.1;
+	roomNine->roomNumber = 9;
+	roomNine->treasure = 2.4;
+	roomThirteen->roomNumber = 13;
+	roomThirteen->treasure = 20.5;
+	savePayload(theListP, roomOne);
+	savePayload(theListP, roomNine);
+	savePayload(theListP, roomThirteen);
+	puts("\nCorrect Result 2:\n\"The room was 1, and the treasure subtotal was 3.1\n"
+			"The room was 9, and the treasure subtotal was 5.5\n"
+			"The room was 13, and the treasure subtotal was 26\"\nActual Result:");
+	printHistory(theListP);
+	puts("");
 	return ok;
 }
