@@ -29,12 +29,21 @@ int main(int argc, char* argv[]) {
 	}
 	*/
 
+	/* Lab 3
 	printf("Number of arguments: %d\n"
 			"The arguments are:\n\n", argc - 1);
 
 	for (int i = 1; i < argc; i ++) {
 		printf("%s\n\n", argv[i]);
 	}
+	*/
+
+	/* Lab 4
+	char* strings[] = {"Hi", "two", "nice"};
+	FILE* myFile = fopen("strings.txt", "w");
+	fputs(strings[1], myFile);
+	*/
+
 
 	return EXIT_SUCCESS;
 }
