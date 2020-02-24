@@ -7,18 +7,18 @@
 
 #include "Student.h"
 
-Student::Student(string name, int ID) {
+template <class MyStruct> Student<MyStruct>::Student(string name, int ID) {
 	this->name = name;
 	this->ID = ID;
 }
 
-Student::~Student() {
+template <class MyStruct> Student<MyStruct>::~Student() {
 }
 
-long Student::getID() {
+template <class MyStruct> long Student<MyStruct>::getID() {
 	return ID;
 }
 
-string Student::getName() {
+template <class MyStruct> string Student<MyStruct>::getName() {
 	return name;
 }

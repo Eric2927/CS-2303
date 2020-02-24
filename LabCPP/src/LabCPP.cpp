@@ -14,7 +14,7 @@ using namespace std;
 int main() {
 	cout << "Hello World" << endl;
 
-	Student* aStudent = new Student("Eric", 831881924);
+	Student<int>* aStudent = new Student<int>("Eric", 831881924);
 	cout << "Name: " << aStudent->getName() << endl;
 	cout << "ID: " << aStudent->getID() << endl;
 	return 0;

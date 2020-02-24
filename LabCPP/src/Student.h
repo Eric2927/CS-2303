@@ -13,7 +13,8 @@
 
 using namespace std;
 
-class Student {
+
+template <class MyStruct> class Student {
 public:
 	Student(string, int);
 	virtual ~Student();
@@ -21,6 +22,7 @@ public:
 	string name;
 	long getID();
 	string getName();
+	int kys(MyStruct hi);
 };
 
 #endif /* STUDENT_H_ */
