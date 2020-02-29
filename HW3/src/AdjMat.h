@@ -13,7 +13,7 @@ typedef struct
 {
 	int n;
 	int* edgesP;
-}AdjMat;
+} AdjMat;
 
 
 void setEdge(AdjMat* adjMP, int row, int col);

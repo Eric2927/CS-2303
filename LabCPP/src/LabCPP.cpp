@@ -10,12 +10,15 @@
 using namespace std;
 
 #include "Student.h"
+#include "WpiStudent.h"
 
 int main() {
 	cout << "Hello World" << endl;
-
-	Student<int>* aStudent = new Student<int>("Eric", 831881924);
-	cout << "Name: " << aStudent->getName() << endl;
-	cout << "ID: " << aStudent->getID() << endl;
-	return 0;
+	Wpi_Student* aStudent = new Wpi_Student();
+	char* myName = "Eric";
+	int myID = 12345;
+	aStudent->setName(myName);
+	aStudent->setID(myID);
+	cout << "My Name: " << aStudent->getName() << endl;
+	cout << "My ID: " << aStudent->getID() << endl;
 }

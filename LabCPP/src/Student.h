@@ -14,15 +14,14 @@
 using namespace std;
 
 
-template <class MyStruct> class Student {
+class Student {
+private:
+	char* name;
 public:
-	Student(string, int);
+	Student();
 	virtual ~Student();
-	long ID;
-	string name;
-	long getID();
-	string getName();
-	int kys(MyStruct hi);
+	char* getName();
+	void setName(char* aName);
 };
 
 #endif /* STUDENT_H_ */
