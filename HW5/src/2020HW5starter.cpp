@@ -10,9 +10,12 @@
 using namespace std;
 #include "Tests.h"
 #include "Production.h"
+#include "EL.h"
+#include "Board.h"
+
 
 int main(int argc, char* argv[]) {
-	cout << "!!!Hello World,  we are on HW4!!!" << endl; // prints !!!Hello World!!!
+	cout << "!!!Hello World,  we are on HW5!!!" << endl; // prints !!!Hello World!!!
 	Tests* tsP = new Tests();
 	if(tsP->tests())
 	{
@@ -28,5 +31,6 @@ int main(int argc, char* argv[]) {
 		cout <<"Not all tests passed." << endl;
 	}
 	delete(tsP);
+
 	return 0;
 }

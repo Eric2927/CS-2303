@@ -8,6 +8,8 @@
 #ifndef PRODUCTION_H_
 #define PRODUCTION_H_
 
+#include "EL.h"
+
 class Production {
 public:
 	Production();

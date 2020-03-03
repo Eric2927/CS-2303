@@ -9,6 +9,11 @@
 #define EL_H_
 
 #include <iostream>
+#include "Board.h"
+#include <stdlib.h>
+#include <time.h>
+#include <fstream>
+#include <cstring>
 
 using namespace std;
 
