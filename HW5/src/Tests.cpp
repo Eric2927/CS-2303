@@ -160,23 +160,32 @@ bool Tests::testMakeMove() {
 	bool moveWasMade = false;
 	bool jump = false;
 	newBoard->makeMove();
+	// Loops through every white piece (white's turn) to see which piece was moved
 	for (int i = 0; i < originalBoard->TOTALSTARTINGPIECES/2; i ++) {
+		// Checks if the white piece of interest is not the same on the original and new boards
 		if ((originalBoard->whitePieces[i] != NULL) &&
 				((originalBoard->whitePieces[i]->row != newBoard->whitePieces[i]->row) ||
 						(originalBoard->whitePieces[i]->col != newBoard->whitePieces[i]->col))) {
+			// if so, then the moved piece has been found
 			movedPiece = originalBoard->whitePieces[i];
+			// Tests each type of one-square diagonal move first
+			// Upper left
 			if (newBoard->whitePieces[i]->row == movedPiece->row - 1 && newBoard->whitePieces[i]->col == movedPiece->col - 1) {
 				direction = 0;
 			}
+			// Upper right
 			else if (newBoard->whitePieces[i]->row == movedPiece->row - 1 && newBoard->whitePieces[i]->col == movedPiece->col + 1) {
 				direction = 1;
 			}
+			// Lower left
 			else if (newBoard->whitePieces[i]->row == movedPiece->row + 1 && newBoard->whitePieces[i]->col == movedPiece->col - 1) {
 				direction = 2;
 			}
+			// Lower right
 			else if (newBoard->whitePieces[i]->row == movedPiece->row + 1 && newBoard->whitePieces[i]->col == movedPiece->col + 1) {
 				direction = 3;
 			}
+			// If not a one-square diagonal move, then a jump must've occured
 			else {
 				jump = true;
 				Board* testBoard = new Board("startingBoard.txt", "moveLog.txt", false);
@@ -186,6 +195,7 @@ bool Tests::testMakeMove() {
 			moveWasMade = true;
 		}
 	}
+	// If not a jump, just call the canMove function, which has already been tested before
 	if (!jump) {
 		if (originalBoard->canMove(movedPiece, direction) == 0) {
 			works = false;
@@ -201,6 +211,10 @@ bool Tests::testMakeMove() {
 	return works;
 }
 
+/**
+ * This method basically takes the given piece and tries to find every possible way it can jump (including multiple jumps)
+ * and sees if it can end up at the given finalRow and finalCol. If not, then returns false. If so, returns true.
+ */
 bool Tests::testMakeMoveHelper(Board* board, Piece* piece, int finalRow, int finalCol, bool firstCall) {
 	Board* currentBoard = board;
 	Piece* movingPiece = piece;

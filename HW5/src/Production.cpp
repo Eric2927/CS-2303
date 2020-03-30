@@ -77,6 +77,8 @@ bool Production::prod(int argc, char* argv[])
 		if (answer) {
 			int moves = 0;
 			Board* aBoard = new Board(inputFilename, outputFilename, true);
+			cout << "Starting Board:" << endl;
+			aBoard->displayBoardToConsole();
 			while (!aBoard->makeMove() && moves < maxMoves) {
 				aBoard->displayBoardToConsole();
 				moves ++;

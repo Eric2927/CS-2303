@@ -17,6 +17,8 @@ Board::Board() {
 	outputFileStream = new ofstream();
 	outputFileStream->open(outputFilename);
 	isBlackTurn = true;
+
+	// populates the current board in the starting arrangement of a checkers game
 	int blackRow = 5;
 	int blackCol = 0;
 	int whiteRow = 0;
@@ -71,16 +73,22 @@ Board::Board(char* inputFilename, char* outputFilename, bool isBlackTurn) {
 	this->outputFilename = outputFilename;
 	outputFileStream = new ofstream();
 	outputFileStream->open(outputFilename);
+
+	// Reads information from the input file
 	ifstream inFile;
 	inFile.open(inputFilename);
 	bool allInformationIsObtained = false;
 	int i = 0;
-	string garbageDump;
+	string garbageDump;			// a string used to store everything that I want to flush out of the file and don't want to use
 	while (!inFile.eof() && !allInformationIsObtained) {
 		switch (inFile.peek()) {
+		// Black king
 		case 'B':
+			// Ignores the character indicating the type of piece and the line after it
 			inFile.ignore(1, '\n');
 			inFile.ignore(1);
+
+			// Keeps reading the coordinates until the terminating character, '#', is reached
 			while (inFile.peek() != '#') {
 				blackPieces[i] = new Piece();
 				blackPieces[i]->isRoyalty = true;
@@ -97,6 +105,7 @@ Board::Board(char* inputFilename, char* outputFilename, bool isBlackTurn) {
 			getline(inFile, garbageDump);
 			getline(inFile, garbageDump);
 			break;
+		// Black pawn
 		case 'b':
 			inFile.ignore(1, '\n');
 			inFile.ignore(1);
@@ -122,6 +131,7 @@ Board::Board(char* inputFilename, char* outputFilename, bool isBlackTurn) {
 			getline(inFile, garbageDump);
 			i = 0;
 			break;
+		// White King
 		case 'W':
 			inFile.ignore(1, '\n');
 			inFile.ignore(1);
@@ -141,6 +151,7 @@ Board::Board(char* inputFilename, char* outputFilename, bool isBlackTurn) {
 			getline(inFile, garbageDump);
 			getline(inFile, garbageDump);
 			break;
+		// White pawn
 		case 'w':
 			inFile.ignore(1, '\n');
 			inFile.ignore(1);
@@ -166,6 +177,7 @@ Board::Board(char* inputFilename, char* outputFilename, bool isBlackTurn) {
 			break;
 		}
 	}
+	// Saves the board to log file
 	*outputFileStream << "Starting Board" << endl;
 	writeBoardToFile();
 }
@@ -280,7 +292,7 @@ void Board::movePiece(Piece* aPiece, int direction, bool jump) {
 			boardLayout[aPiece->row*BOARDDIMENSIONS + aPiece->col] = aPiece;
 		}
 		break;
-		// Upper right
+	// Upper right
 	case 1:
 		if (jump) {
 			if (aPiece->isBlack) {
@@ -313,7 +325,7 @@ void Board::movePiece(Piece* aPiece, int direction, bool jump) {
 			boardLayout[aPiece->row*BOARDDIMENSIONS + aPiece->col] = aPiece;
 		}
 		break;
-		// Lower left
+	// Lower left
 	case 2:
 		if (jump) {
 			if (aPiece->isBlack) {
@@ -346,6 +358,7 @@ void Board::movePiece(Piece* aPiece, int direction, bool jump) {
 			boardLayout[aPiece->row*BOARDDIMENSIONS + aPiece->col] = aPiece;
 		}
 		break;
+	// Lower right
 	case 3:
 		if (jump) {
 			if (aPiece->isBlack) {
@@ -380,16 +393,19 @@ void Board::movePiece(Piece* aPiece, int direction, bool jump) {
 		break;
 	}
 
-	if (aPiece->isBlack) {
-		if (aPiece->row == 0) {
-			*outputFileStream << "Black pawn at (" << aPiece->row << " " << aPiece->col << ") is crowned king" << endl;
-			aPiece->isRoyalty = true;
+	// Checks if any pawn became king after the move
+	if (!aPiece->isRoyalty) {
+		if (aPiece->isBlack) {
+			if (aPiece->row == 0) {
+				*outputFileStream << "Black pawn at (" << aPiece->row << " " << aPiece->col << ") is crowned king" << endl;
+				aPiece->isRoyalty = true;
+			}
 		}
-	}
-	else {
-		if (aPiece->row == 7) {
-			*outputFileStream << "White pawn at (" << aPiece->row << " " << aPiece->col << ") is crowned king" << endl;
-			aPiece->isRoyalty = true;
+		else {
+			if (aPiece->row == 7) {
+				*outputFileStream << "White pawn at (" << aPiece->row << " " << aPiece->col << ") is crowned king" << endl;
+				aPiece->isRoyalty = true;
+			}
 		}
 	}
 	writeBoardToFile();
@@ -423,7 +439,7 @@ int Board::canMove(Piece* aPiece, int direction) {
 		}
 		break;
 
-		// Upper right
+	// Upper right
 	case 1:
 		if (!aPiece->isRoyalty && !aPiece->isBlack) {
 			// Possible is already set to 0
@@ -447,7 +463,7 @@ int Board::canMove(Piece* aPiece, int direction) {
 		}
 		break;
 
-		// Lower left
+	// Lower left
 	case 2:
 		if (!aPiece->isRoyalty && aPiece->isBlack) {
 			// Possible is already set to 0
@@ -471,7 +487,7 @@ int Board::canMove(Piece* aPiece, int direction) {
 		}
 		break;
 
-		// Lower right
+	// Lower right
 	case 3:
 		if (!aPiece->isRoyalty && aPiece->isBlack) {
 			// Possible is already set to 0
@@ -504,14 +520,22 @@ bool Board::makeMove() {
 	Piece* pieceToMove = NULL;
 	int directionToMove = -1;
 	int moveable = 0;
-	int numPossibleMoves = 0;
+	int numPossibleMoves = 0;	// Tracks number of possible moves
+	// Checks whose turn it is
 	if (isBlackTurn) {
+		// Loops through every black piece if it is black's turn
 		for (int i = 0; i < TOTALSTARTINGPIECES/2; i ++) {
+			// First checks if the piece is dead
 			if (!blackPieces[i]->isDead) {
+				// If not dead, loops through every possible direction that the piece can travel in
 				for (int dir = 0; dir < 4; dir ++) {
+					// Filters only valid directions
 					if (dir < 2 || blackPieces[i]->isRoyalty) {
+						// Based on what the current planned move is, different code is executed
 						switch (moveable) {
+						// If currently, no move can be done by any piece
 						case 0:
+							// As long as some piece can move or jump, it becomes the planned move
 							if (canMove(blackPieces[i], dir)) {
 								moveable = canMove(blackPieces[i], dir);
 								pieceToMove = blackPieces[i];
@@ -519,13 +543,16 @@ bool Board::makeMove() {
 								numPossibleMoves ++;
 							}
 							break;
+						// If currently, the planned move is a normal one-square diagnoal move (not jump)
 						case 1:
+							// If the move being tested is a jump, then the jump is automatically chosen over the currently planned move
 							if (canMove(blackPieces[i], dir) == 2) {
 								moveable = 2;
 								pieceToMove = blackPieces[i];
 								directionToMove = dir;
-								numPossibleMoves = 1;
+								numPossibleMoves = 1;	// Since a jump is possible, the user is forced to do the jump. Thus, there is only one possible move (unless another jump is possible)
 							}
+							// If the move being tested is a normal one-square move, then there is a 50-50 chance that it gets swapped with the currently planned move
 							else if (canMove(blackPieces[i], dir) == 1) {
 								if (rand() % 2) {
 									pieceToMove = blackPieces[i];
@@ -534,7 +561,9 @@ bool Board::makeMove() {
 								numPossibleMoves ++;
 							}
 							break;
+						// If curreently, the planned move is a jump
 						case 2:
+							// If the move being tested is also a jump, then there is a 50-50 chance of that it gets swapped with the currently planned move
 							if (canMove(blackPieces[i], dir) == 2) {
 								if (rand() % 2) {
 									pieceToMove = blackPieces[i];
@@ -548,15 +577,20 @@ bool Board::makeMove() {
 				}
 			}
 		}
+		// Save number of possible moves to file
 		*outputFileStream << "Number of possible moves: " << numPossibleMoves << endl;
+		// Depending on the type of move chosen, different code is executed
 		switch (moveable) {
+		// If the planned move is 0, that means no move is possible. Thus, game is over.
 		case 0:
 			*outputFileStream << "No possible moves. Black loses." << endl;
 			gameIsOver = true;
 			break;
+		// If the planned move is 1, that means a one-square diagnoal move. Thus, the piece is moved and the turn is ended.
 		case 1:
 			movePiece(pieceToMove, directionToMove, false);
 			break;
+		// If the planned move is 2, that means a jump. In this case, the program will keep trying to jump until no jump is possible.
 		case 2:
 			bool canJump = true;
 			while (canJump) {
@@ -585,6 +619,7 @@ bool Board::makeMove() {
 			break;
 		}
 	}
+	// If it is white's turn (code is almost the same as for black's turn, but adapted for white's turn)
 	else {
 		for (int i = 0; i < TOTALSTARTINGPIECES/2; i ++) {
 			if (!whitePieces[i]->isDead) {
@@ -665,8 +700,8 @@ bool Board::makeMove() {
 			break;
 		}
 	}
-	isBlackTurn = !isBlackTurn;
-	return gameIsOver;
+	isBlackTurn = !isBlackTurn;			// Turn switches to other player
+	return gameIsOver;		// Function returns whether the game has ended
 }
 
 void Board::displayBoardToConsole() {
